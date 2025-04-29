@@ -4,7 +4,7 @@ import "./Login.css";
 
 const Login = () => {
     return (
-        <main className= "main_login">
+        <main className="main_login">
             <div className="banner"></div>
             <section className="section_login">
                 <img src={Logo} alt="Logo do Filmoteca" />
@@ -13,14 +13,14 @@ const Login = () => {
                     <div className="campos_login">
                         <div className="campo_input">
                             <label htmlFor="email">Email:</label>
-                            <input type="email" name="email" placeholder="Digite seu e-mail"/>
+                            <input type="email" name="email" placeholder="Digite seu e-mail" />
                         </div>
                         <div className="campo_input">
                             <label htmlFor="senha">Senha:</label>
-                            <input type="password" name="senha" placeholder="Digite sua senha"/>
+                            <input type="password" name="senha" placeholder="Digite sua senha" />
                         </div>
                     </div>
-                    <Botao/>
+                    <Botao nomeDoBotao="Entrar" />
                 </form>
             </section>
         </main>

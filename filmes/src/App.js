@@ -1,15 +1,11 @@
-
 import './App.css';
-import CadastroFilme from './pages/cadastroFilme/CadastroFilme';
-// import Login from './pages/login/Login';
+import Rotas from "./Routes/routes"
 
 function App() {
   return (
-    <>
-    {/* Chamar as paginas */}
-    {/* <Login/> */}
-    <CadastroFilme/>
-    </>
+
+    <Rotas />
+
   );
 }
 //Ele libera a função para ser usada
