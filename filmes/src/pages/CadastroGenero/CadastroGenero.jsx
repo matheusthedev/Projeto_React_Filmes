@@ -13,22 +13,25 @@ const CadastroGenero = () => {
 
     // nome do genero
     const [genero, setGenero] = useState("");
-    function alerta(icone, mensagem){
+    const [listaGenero, setListaGenero] = useState([])
+    const [deletaGenero, setDeletaGenero] = useState();
+
+    function alerta(icone, mensagem) {
         const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.onmouseenter = Swal.stopTimer;
-    toast.onmouseleave = Swal.resumeTimer;
-  }
-});
-Toast.fire({
-  icon: icone,
-  title: mensagem
-});
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: icone,
+            title: mensagem
+        });
     }
     async function cadastrarGenero(e) {
         e.preventDefault();
@@ -48,12 +51,70 @@ Toast.fire({
             alerta("error", "Preencha o campo vazio")
         }
     }
+    //sincrono => Acontece simultaneamente
+    //assincrono => Espera algo/resposta para ir em outro bloco do codigo
+    async function listarGenero(){
+        try {
+            //await => Aguarda uma resp da solicitação
+            const resposta = await api.get("genero");
+
+            // console.log(resposta);
+
+            setListaGenero(resposta.data);
+            console.log(resposta.data);
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    //Funcao excluir genero
+    async function removerGenero(idGenero, warning) {
+        try {
+            const excluirGenero = await api.delete(`genero/${idGenero}`)
+            setDeletaGenero(excluirGenero.data)
+
+            Swal.fire({
+                title: "Você tem certeza que quer excluir?",
+                text: "Você não vai poder reverter isso!",
+                icon: warning,
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sim, deletar isso!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deletado!",
+                        text: "Deletado com sucesso!",
+                        icon: "success"
+                    });
+                }
+            });
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
     // teste: validar o genero
     // useEffect(() => {
     //     console.log(genero);
     // },[genero])
     // Fim do teste
+
+    // Teste: validar o que esta sendo passado como resposta em listaGenero
+    useEffect(() => {
+        listarGenero();
+    }, [listarGenero])
+
+    // Fim do teste
+
+
+
+
+
+
 
     return (
         <>
@@ -73,6 +134,11 @@ Toast.fire({
                 <Lista
                     titulo="Lista dos Gêneros"
                     visible="none"
+
+                    //atribuir para lista, o meu estado atual:
+                    lista = {listaGenero}
+
+                    deletar={removerGenero}
                 />
             </main>
             <Footer />
