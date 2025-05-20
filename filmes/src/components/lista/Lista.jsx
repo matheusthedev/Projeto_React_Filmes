@@ -19,7 +19,7 @@ const Lista = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* Verificar se alista esta vindo vazia */}
+                        {/* Verificar se a lista esta vindo vazia */}
                         {props.lista && props.lista.length > 0 ? (
                             props.lista.map((item) => (
                                 <tr className="item_lista" key={item.idGenero}>
@@ -27,7 +27,7 @@ const Lista = (props) => {
                                         {item.nome}
                                     </td>
                                     <td data-cell="Gênero" style={{ display: props.visible }}>Ação</td>
-                                    <td data-cell="Editar"><img src={Editar} alt="Imagem de uma caneta" /></td>
+                                    <td data-cell="Editar"><img src={Editar} alt="Imagem de uma caneta" onClick={() => {props.funcEditar(item)}} style={{ cursor: "pointer" }}/></td>
                                     <td data-cell="Excluir"><img src={Excluir} alt="Imagem de uma caixa de lixo" onClick={() => props.deletar(item.idGenero)} style={{ cursor: "pointer" }} /></td>
                                 </tr>
                             ))

@@ -16,7 +16,7 @@ const CadastroGenero = () => {
     const [listaGenero, setListaGenero] = useState([])
     const [deletaGenero, setDeletaGenero] = useState();
 
-    function alerta(icone, mensagem) {
+    function alertar(icone, mensagem) {
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -42,18 +42,18 @@ const CadastroGenero = () => {
             try {
                 // cadastrar um genero: post
                 await api.post("genero", { nome: genero });
-                alerta("success", "Cadastro realizado com sucesso!")
+                alertar("success", "Cadastro realizado com sucesso!")
                 setGenero("")
             } catch (error) {
-                alerta("error", "Erro! entre em contato com o suporte")
+                alertar("error", "Erro! entre em contato com o suporte")
             }
         } else {
-            alerta("error", "Preencha o campo vazio")
+            alertar("error", "Preencha o campo vazio")
         }
     }
     //sincrono => Acontece simultaneamente
     //assincrono => Espera algo/resposta para ir em outro bloco do codigo
-    async function listarGenero(){
+    async function listarGenero() {
         try {
             //await => Aguarda uma resp da solicitação
             const resposta = await api.get("genero");
@@ -62,7 +62,7 @@ const CadastroGenero = () => {
 
             setListaGenero(resposta.data);
             console.log(resposta.data);
-            
+
         } catch (error) {
             console.log(error);
         }
@@ -81,7 +81,7 @@ const CadastroGenero = () => {
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Sim, deletar isso!"
+                confirmButtonText: "Confirmar"
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
@@ -97,6 +97,32 @@ const CadastroGenero = () => {
         }
     }
 
+
+        async function editarGenero(genero){
+        const { value: novoGenero } = await Swal.fire({
+            title: "Modifique seu gênero",
+            input: "text",
+            inputLabel: "Novo gênero",
+            inputValue: genero.nome,
+            showCancelButton: true,
+            inputValidator: (value) => {
+                if (!value) {
+                    return "O campo não pode estar vazio!";
+                }
+            }
+        });
+
+        if (novoGenero) {
+            try {
+                api.put(`genero/${genero.idGenero}`, {nome: novoGenero})
+                Swal.fire(`O gênero modificado ${novoGenero}`);
+                listaGenero();
+            } catch (error) {
+                
+            }
+        }
+    }
+
     // teste: validar o genero
     // useEffect(() => {
     //     console.log(genero);
@@ -106,15 +132,9 @@ const CadastroGenero = () => {
     // Teste: validar o que esta sendo passado como resposta em listaGenero
     useEffect(() => {
         listarGenero();
-    }, [listarGenero])
+    }, [listaGenero])
 
     // Fim do teste
-
-
-
-
-
-
 
     return (
         <>
@@ -136,9 +156,10 @@ const CadastroGenero = () => {
                     visible="none"
 
                     //atribuir para lista, o meu estado atual:
-                    lista = {listaGenero}
+                    lista={listaGenero}
 
                     deletar={removerGenero}
+                    funcEditar={editarGenero}
                 />
             </main>
             <Footer />
