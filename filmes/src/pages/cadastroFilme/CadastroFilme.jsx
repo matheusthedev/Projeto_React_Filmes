@@ -12,6 +12,7 @@ const CadastroFilme = () => {
      const [ listaGenero, setListaGenero] = useState([])
     const [ genero, setGenero] = useState("")
     const [ filme, setFilme] = useState("")
+    const[listaFilme, setListaFilme] = useState([])
 
 
     function alertar(icone, mensagem) {
@@ -46,6 +47,7 @@ const CadastroFilme = () => {
 
         useEffect(()=>{
             listarGenero();
+            listarFilme();
         }, [])
 
         async function cadastrarFilme(e){
@@ -64,6 +66,18 @@ const CadastroFilme = () => {
                 alertar("error", "Erro! preencha os campos")
             }
             
+        }
+
+
+        async function listarFilme(){
+            try {
+                const resposta = await api.get("filme")
+
+                setFilme(resposta.data)
+            } catch (error) {
+                console.log(error);
+                
+            }
         }
 
     return (
